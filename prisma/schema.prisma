@@ -1,0 +1,472 @@
+// Waypoint — Prisma Schema
+// PostgreSQL. UUID primary keys throughout. Soft deletes on entities that
+// the product exposes archive/restore/trash behavior for (User, Project,
+// Task). See ARCHITECTURE.md §4 for the reasoning behind each decision
+// below.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ────────────────────────────────────────────────────────────────────────
+// Identity & access
+// ────────────────────────────────────────────────────────────────────────
+
+model User {
+  id           String    @id @default(uuid())
+  email        String    @unique
+  passwordHash String
+  firstName    String
+  lastName     String
+  avatarUrl    String?
+  jobTitle     String?
+  timezone     String    @default("UTC")
+
+  roleId String
+  role   Role   @relation(fields: [roleId], references: [id])
+
+  emailVerifiedAt DateTime?
+  isActive        Boolean   @default(true)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime? // soft delete — admin can deactivate without losing history
+
+  // Relations
+  sessions             Session[]
+  ownedProjects        Project[]            @relation("ProjectOwner")
+  projectMemberships   ProjectMember[]
+  teamMemberships      TeamMember[]
+  assignedTasks        Task[]               @relation("TaskAssignee")
+  createdTasks         Task[]               @relation("TaskCreator")
+  comments             TaskComment[]
+  uploadedFiles        File[]
+  notifications        Notification[]
+  notificationPrefs    NotificationPreference?
+  activityLogs         ActivityLog[]
+  passwordResetTokens  PasswordResetToken[]
+
+  @@index([roleId])
+  @@map("users")
+}
+
+model Role {
+  id          String   @id @default(uuid())
+  name        String   @unique // ADMINISTRATOR | PROJECT_MANAGER | TEAM_MEMBER
+  description String?
+  createdAt   DateTime @default(now())
+
+  users       User[]
+  permissions RolePermission[]
+
+  @@map("roles")
+}
+
+model Permission {
+  id     String @id @default(uuid())
+  key    String @unique // e.g. "project:archive", "user:manage"
+  label  String
+  domain String // e.g. "project", "user", "analytics" — used to group in the admin UI
+
+  roles RolePermission[]
+
+  @@map("permissions")
+}
+
+// Explicit join table (not Prisma implicit m2m) so grants carry metadata.
+model RolePermission {
+  roleId       String
+  permissionId String
+  grantedAt    DateTime @default(now())
+
+  role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@id([roleId, permissionId])
+  @@map("role_permissions")
+}
+
+// Refresh-token sessions — persisted so tokens are individually revocable.
+model Session {
+  id               String   @id @default(uuid())
+  userId           String
+  refreshTokenHash String   @unique
+  userAgent        String?
+  ipAddress        String?
+  expiresAt        DateTime
+  createdAt        DateTime @default(now())
+  revokedAt        DateTime?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("sessions")
+}
+
+model PasswordResetToken {
+  id        String   @id @default(uuid())
+  userId    String
+  tokenHash String   @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("password_reset_tokens")
+}
+
+// ────────────────────────────────────────────────────────────────────────
+// Teams
+// ────────────────────────────────────────────────────────────────────────
+
+model Team {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  deletedAt   DateTime?
+
+  members  TeamMember[]
+  projects Project[]
+
+  @@map("teams")
+}
+
+model TeamMember {
+  id       String   @id @default(uuid())
+  teamId   String
+  userId   String
+  joinedAt DateTime @default(now())
+
+  team Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([teamId, userId])
+  @@map("team_members")
+}
+
+// ────────────────────────────────────────────────────────────────────────
+// Projects
+// ────────────────────────────────────────────────────────────────────────
+
+enum ProjectStatus {
+  PLANNING
+  ACTIVE
+  ON_HOLD
+  COMPLETED
+  ARCHIVED
+}
+
+enum ProjectPriority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+model Project {
+  id          String          @id @default(uuid())
+  name        String
+  slug        String          @unique
+  description String?
+  status      ProjectStatus   @default(PLANNING)
+  priority    ProjectPriority @default(MEDIUM)
+  budget      Decimal?        @db.Decimal(12, 2)
+  startDate   DateTime?
+  dueDate     DateTime?
+
+  ownerId String
+  owner   User   @relation("ProjectOwner", fields: [ownerId], references: [id])
+
+  teamId String?
+  team   Team?   @relation(fields: [teamId], references: [id])
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  archivedAt DateTime?
+  deletedAt DateTime?
+
+  members     ProjectMember[]
+  tasks       Task[]
+  milestones  Milestone[]
+  labels      Label[]
+  files       File[]
+
+  @@index([ownerId])
+  @@index([teamId])
+  @@index([status])
+  @@map("projects")
+}
+
+enum ProjectRole {
+  MANAGER
+  CONTRIBUTOR
+  VIEWER
+}
+
+// Explicit join table carrying the member's project-level role + join date.
+model ProjectMember {
+  id        String      @id @default(uuid())
+  projectId String
+  userId    String
+  role      ProjectRole @default(CONTRIBUTOR)
+  joinedAt  DateTime    @default(now())
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, userId])
+  @@index([userId])
+  @@index([projectId])
+  @@map("project_members")
+}
+
+model Milestone {
+  id          String    @id @default(uuid())
+  projectId   String
+  title       String
+  description String?
+  dueDate     DateTime?
+  completedAt DateTime?
+  order       Int       @default(0)
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  tasks   Task[]
+
+  @@index([projectId])
+  @@map("milestones")
+}
+
+// ────────────────────────────────────────────────────────────────────────
+// Tasks
+// ────────────────────────────────────────────────────────────────────────
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  IN_REVIEW
+  DONE
+}
+
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+model Task {
+  id          String       @id @default(uuid())
+  projectId   String
+  title       String
+  description String?
+  status      TaskStatus   @default(TODO)
+  priority    TaskPriority @default(MEDIUM)
+  dueDate     DateTime?
+  position    Int          @default(0) // ordering within a Kanban column
+
+  milestoneId String?
+  milestone   Milestone? @relation(fields: [milestoneId], references: [id])
+
+  parentTaskId String? // self-relation enables subtasks
+  parentTask   Task?   @relation("TaskSubtasks", fields: [parentTaskId], references: [id])
+  subtasks     Task[]  @relation("TaskSubtasks")
+
+  assigneeId String?
+  assignee   User?   @relation("TaskAssignee", fields: [assigneeId], references: [id])
+
+  creatorId String
+  creator   User   @relation("TaskCreator", fields: [creatorId], references: [id])
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  completedAt DateTime?
+  deletedAt DateTime?
+
+  project      Project        @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  comments     TaskComment[]
+  attachments  TaskAttachment[]
+  labels       TaskLabel[]
+  history      TaskHistoryEntry[]
+  dependsOn    TaskDependency[] @relation("DependentTask")
+  dependedBy   TaskDependency[] @relation("BlockingTask")
+
+  @@index([projectId])
+  @@index([assigneeId])
+  @@index([milestoneId])
+  @@index([parentTaskId])
+  @@map("tasks")
+}
+
+// A depends on B: A cannot move to DONE until B is DONE.
+model TaskDependency {
+  id            String @id @default(uuid())
+  dependentId   String // the task that is blocked
+  blockingId    String // the task that must complete first
+
+  dependentTask Task @relation("DependentTask", fields: [dependentId], references: [id], onDelete: Cascade)
+  blockingTask  Task @relation("BlockingTask", fields: [blockingId], references: [id], onDelete: Cascade)
+
+  @@unique([dependentId, blockingId])
+  @@map("task_dependencies")
+}
+
+model TaskComment {
+  id        String   @id @default(uuid())
+  taskId    String
+  authorId  String
+  body      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  editedAt  DateTime?
+  deletedAt DateTime?
+
+  task   Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  author User @relation(fields: [authorId], references: [id])
+
+  @@index([taskId])
+  @@map("task_comments")
+}
+
+model TaskAttachment {
+  id       String @id @default(uuid())
+  taskId   String
+  fileId   String
+
+  task Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  file File @relation(fields: [fileId], references: [id], onDelete: Cascade)
+
+  @@unique([taskId, fileId])
+  @@map("task_attachments")
+}
+
+// Append-only change record — powers the "Task History" requirement.
+model TaskHistoryEntry {
+  id        String   @id @default(uuid())
+  taskId    String
+  field     String   // e.g. "status", "assignee", "priority"
+  oldValue  String?
+  newValue  String?
+  changedBy String
+  changedAt DateTime @default(now())
+
+  task Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  @@index([taskId])
+  @@map("task_history_entries")
+}
+
+model Label {
+  id        String @id @default(uuid())
+  projectId String
+  name      String
+  color     String // hex, chosen from the design system's label palette
+
+  project Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  tasks   TaskLabel[]
+
+  @@unique([projectId, name])
+  @@map("labels")
+}
+
+model TaskLabel {
+  taskId  String
+  labelId String
+
+  task  Task  @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  label Label @relation(fields: [labelId], references: [id], onDelete: Cascade)
+
+  @@id([taskId, labelId])
+  @@map("task_labels")
+}
+
+// ────────────────────────────────────────────────────────────────────────
+// Files
+// ────────────────────────────────────────────────────────────────────────
+
+model File {
+  id           String   @id @default(uuid())
+  projectId    String?
+  uploaderId   String
+  fileName     String
+  mimeType     String
+  sizeBytes    Int
+  storageKey   String   // path/key in object storage, not the bytes themselves
+  createdAt    DateTime @default(now())
+  deletedAt    DateTime?
+
+  project     Project?         @relation(fields: [projectId], references: [id])
+  uploader    User             @relation(fields: [uploaderId], references: [id])
+  attachments TaskAttachment[]
+
+  @@index([projectId])
+  @@map("files")
+}
+
+// ────────────────────────────────────────────────────────────────────────
+// Notifications & activity
+// ────────────────────────────────────────────────────────────────────────
+
+enum NotificationType {
+  TASK_ASSIGNED
+  TASK_DUE_SOON
+  TASK_COMMENTED
+  PROJECT_STATUS_CHANGED
+  MENTIONED
+  MEMBER_ADDED
+}
+
+model Notification {
+  id        String           @id @default(uuid())
+  userId    String
+  type      NotificationType
+  title     String
+  body      String
+  link      String?
+  readAt    DateTime?
+  createdAt DateTime         @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, readAt])
+  @@map("notifications")
+}
+
+model NotificationPreference {
+  id                 String  @id @default(uuid())
+  userId              String  @unique
+  emailOnAssignment    Boolean @default(true)
+  emailOnComment       Boolean @default(true)
+  emailOnDueSoon       Boolean @default(true)
+  inAppEnabled         Boolean @default(true)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("notification_preferences")
+}
+
+// Polymorphic, append-only audit trail. subjectType + subjectId avoids a
+// new nullable FK column every time a new auditable entity is introduced.
+model ActivityLog {
+  id          String   @id @default(uuid())
+  actorId     String
+  action      String   // e.g. "project.archived", "task.status_changed"
+  subjectType String   // e.g. "Project", "Task", "User"
+  subjectId   String
+  metadata    Json?    // small structured context, e.g. { from: "ACTIVE", to: "ARCHIVED" }
+  createdAt   DateTime @default(now())
+
+  actor User @relation(fields: [actorId], references: [id])
+
+  @@index([subjectType, subjectId])
+  @@index([actorId])
+  @@map("activity_logs")
+}

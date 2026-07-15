@@ -1,0 +1,24 @@
+{
+  "name": "waypoint",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:api": "npm run dev --workspace=@waypoint/api",
+    "dev:web": "npm run dev --workspace=@waypoint/web",
+    "build:api": "npm run build --workspace=@waypoint/api",
+    "build:web": "npm run build --workspace=@waypoint/web",
+    "lint": "npm run lint --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "prisma:generate": "npm run prisma:generate --workspace=@waypoint/api",
+    "prisma:migrate": "npm run prisma:migrate --workspace=@waypoint/api",
+    "prisma:seed": "npm run prisma:seed --workspace=@waypoint/api"
+  },
+  "devDependencies": {
+    "prettier": "^3.3.3"
+  }
+}

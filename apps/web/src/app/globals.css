@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  * {
+    @apply border-hairline;
+  }
+
+  body {
+    @apply bg-cloud text-ink font-sans text-body antialiased;
+  }
+
+  /* Visible keyboard focus everywhere, styled rather than suppressed. */
+  :focus-visible {
+    outline: 2px solid theme("colors.indigo.deep");
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
