@@ -1,5 +1,6 @@
 import swaggerJsdoc from "swagger-jsdoc";
-import path from "node:path";
+
+const apiGlobBase = process.cwd().replace(/\\/g, "/");
 
 export const swaggerSpec = swaggerJsdoc({
   definition: {
@@ -18,7 +19,7 @@ export const swaggerSpec = swaggerJsdoc({
     security: [{ bearerAuth: [] }],
   },
   apis: [
-    path.join(__dirname, "../modules/**/*.routes.ts"),
-    path.join(__dirname, "../modules/**/*.routes.js"),
+    `${apiGlobBase}/src/modules/**/*.routes.ts`,
+    `${apiGlobBase}/src/modules/**/*.routes.js`,
   ],
 });
