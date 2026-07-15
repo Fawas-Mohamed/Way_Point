@@ -19,6 +19,28 @@ export const authRouter = Router();
  *   post:
  *     tags: [Auth]
  *     summary: Create a new account
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [firstName, lastName, email, password]
+ *             properties:
+ *               firstName:
+ *                 type: string
+ *                 example: Jone
+ *               lastName:
+ *                 type: string
+ *                 example: Doe
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 example: jone@gmail.com
+ *               password:
+ *                 type: string
+ *                 format: password
+ *                 example: Password123!
  */
 authRouter.post("/register", authRateLimiter, validate(RegisterSchema), authController.register);
 
@@ -28,6 +50,25 @@ authRouter.post("/register", authRateLimiter, validate(RegisterSchema), authCont
  *   post:
  *     tags: [Auth]
  *     summary: Sign in with email and password
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [email, password]
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 example: john@gmail.com
+ *               password:
+ *                 type: string
+ *                 format: password
+ *                 example: Password123!
+ *               rememberMe:
+ *                 type: boolean
+ *                 example: false
  */
 authRouter.post("/login", authRateLimiter, validate(LoginSchema), authController.login);
 
@@ -73,6 +114,18 @@ authRouter.get("/me", requireAuth, authController.me);
  *   post:
  *     tags: [Auth]
  *     summary: Request a password reset link
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [email]
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 example: jone@gmail.com
  */
 authRouter.post(
   "/forgot-password",
@@ -87,6 +140,21 @@ authRouter.post(
  *   post:
  *     tags: [Auth]
  *     summary: Reset a password using a reset token
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [token, password]
+ *             properties:
+ *               token:
+ *                 type: string
+ *                 example: reset-token-value
+ *               password:
+ *                 type: string
+ *                 format: password
+ *                 example: Password123!
  */
 authRouter.post("/reset-password", authRateLimiter, validate(ResetPasswordSchema), authController.resetPassword);
 
@@ -96,6 +164,22 @@ authRouter.post("/reset-password", authRateLimiter, validate(ResetPasswordSchema
  *   post:
  *     tags: [Auth]
  *     summary: Change the current user's password
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [currentPassword, newPassword]
+ *             properties:
+ *               currentPassword:
+ *                 type: string
+ *                 format: password
+ *                 example: Password123!
+ *               newPassword:
+ *                 type: string
+ *                 format: password
+ *                 example: NewPass123!
  */
 authRouter.post(
   "/change-password",
