@@ -149,3 +149,21 @@ projectsRouter.delete(
   requirePermission(PERMISSIONS.PROJECT_MANAGE_MEMBERS),
   projectsController.removeMember,
 );
+
+/**
+ * @openapi
+ * /projects/{projectId}/files:
+ *   get:
+ *     tags: [Projects]
+ *     summary: List files attached to a project
+ */
+projectsRouter.get("/:projectId/files", requirePermission(PERMISSIONS.PROJECT_VIEW), projectsController.listFiles);
+
+/**
+ * @openapi
+ * /projects/{projectId}/activity:
+ *   get:
+ *     tags: [Projects]
+ *     summary: List project activity entries
+ */
+projectsRouter.get("/:projectId/activity", requirePermission(PERMISSIONS.PROJECT_VIEW), projectsController.listActivity);

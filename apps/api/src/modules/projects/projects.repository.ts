@@ -142,4 +142,21 @@ export const projectsRepository = {
       where: { projectId_userId: { projectId, userId } },
     });
   },
+
+  listFiles(projectId: string) {
+    return prisma.file.findMany({
+      where: { projectId, deletedAt: null },
+      include: { uploader: { select: { id: true, firstName: true, lastName: true, avatarUrl: true } } },
+      orderBy: { createdAt: "desc" },
+    });
+  },
+
+  listActivity(projectId: string) {
+    return prisma.activityLog.findMany({
+      where: { subjectType: "Project", subjectId: projectId },
+      include: { actor: { select: { id: true, firstName: true, lastName: true, avatarUrl: true } } },
+      orderBy: { createdAt: "desc" },
+      take: 50,
+    });
+  },
 };

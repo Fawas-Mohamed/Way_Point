@@ -193,4 +193,16 @@ export const projectsService = {
       metadata: { userId: targetUserId },
     });
   },
+
+  async listFiles(projectId: string, user: ActingUser) {
+    const project = await loadProjectOrThrow(projectId);
+    assertCanView(project, user);
+    return projectsRepository.listFiles(projectId);
+  },
+
+  async listActivity(projectId: string, user: ActingUser) {
+    const project = await loadProjectOrThrow(projectId);
+    assertCanView(project, user);
+    return projectsRepository.listActivity(projectId);
+  },
 };

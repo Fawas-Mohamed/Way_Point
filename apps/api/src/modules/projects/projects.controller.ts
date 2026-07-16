@@ -65,4 +65,14 @@ export const projectsController = {
     await projectsService.removeMember(req.params.projectId, req.params.userId, req.user!);
     sendSuccess(res, { message: "Member removed" });
   }),
+
+  listFiles: asyncHandler(async (req: Request, res: Response) => {
+    const files = await projectsService.listFiles(req.params.projectId, req.user!);
+    sendSuccess(res, { files });
+  }),
+
+  listActivity: asyncHandler(async (req: Request, res: Response) => {
+    const activity = await projectsService.listActivity(req.params.projectId, req.user!);
+    sendSuccess(res, { activity });
+  }),
 };
