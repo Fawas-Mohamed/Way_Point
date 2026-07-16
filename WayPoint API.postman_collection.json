@@ -1,0 +1,822 @@
+{
+  "info": {
+    "_postman_id": "9b79c26e-f590-44b5-a3fc-c40d0c5a65a0",
+    "name": "WayPoint API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "51711110",
+    "_collection_link": "https://go.postman.co/collection/51711110-9b79c26e-f590-44b5-a3fc-c40d0c5a65a0?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"firstName\": \"Jone\",\r\n  \"lastName\": \"Doe\",\r\n  \"email\": \"jone1@gmail.com\",\r\n  \"password\": \"Password123!\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:4000/api/v1/auth/register",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"fawas@gmail.com\",\r\n  \"password\": \"Fawas123+-\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:4000/api/v1/auth/login",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Change Password",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI4Zjg4YThkZC00MDA0LTRlY2YtYmVlYS1lMWE2ZTMzNTJmNDQiLCJyb2xlSWQiOiIzYjY5ZmFkMC1iYmQzLTQ0OGMtOGFmMy05ZWUyNmQ5MDJiNzAiLCJyb2xlTmFtZSI6IlRFQU1fTUVNQkVSIiwiaWF0IjoxNzg0MjIzNjA4LCJleHAiOjE3ODQyMjQ1MDgsImlzcyI6IndheXBvaW50LWFwaSJ9.VRZgIX7vdNrA7i8f_0yFFmoLfWyVHdiyf84PkSISB6c",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"currentPassword\": \"Fawas123+-\",\r\n  \"newPassword\": \"NewPassword123!\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:4000/api/v1/auth/change-password",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "change-password"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Project",
+      "item": [
+        {
+          "name": "Create a Project",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OGY5NjUzZi0zOGFhLTQ4YjgtOThjNy1lYTBmMTY3NDBjMjciLCJyb2xlSWQiOiJkOWY2ZWI1Zi00MDEyLTRkNDYtOTAyYi00OTIyYmNjNjE2ODAiLCJyb2xlTmFtZSI6IkFETUlOSVNUUkFUT1IiLCJpYXQiOjE3ODQyMjczNTgsImV4cCI6MTc4NDIyODI1OCwiaXNzIjoid2F5cG9pbnQtYXBpIn0.Jrom5eUai5xgAblFdXdvgQ9EZaoKHGsWZOV6Yf4xPfY",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"Task Management Platform\",\r\n  \"description\": \"Internship Assessment\",\r\n  \"status\": \"ACTIVE\",\r\n  \"priority\": \"HIGH\",\r\n  \"startDate\": \"2026-07-16\",\r\n  \"endDate\": \"2026-08-30\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:4000/api/v1/projects",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "api",
+                "v1",
+                "projects"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Archive Project",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OGY5NjUzZi0zOGFhLTQ4YjgtOThjNy1lYTBmMTY3NDBjMjciLCJyb2xlSWQiOiJkOWY2ZWI1Zi00MDEyLTRkNDYtOTAyYi00OTIyYmNjNjE2ODAiLCJyb2xlTmFtZSI6IkFETUlOSVNUUkFUT1IiLCJpYXQiOjE3ODQyMjczNTgsImV4cCI6MTc4NDIyODI1OCwiaXNzIjoid2F5cG9pbnQtYXBpIn0.Jrom5eUai5xgAblFdXdvgQ9EZaoKHGsWZOV6Yf4xPfY",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:4000 /api/v1/projects/d8008864-6711-4dc9-a3cc-d062f6e75e35/archive",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000 ",
+              "path": [
+                "api",
+                "v1",
+                "projects",
+                "d8008864-6711-4dc9-a3cc-d062f6e75e35",
+                "archive"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Project",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OGY5NjUzZi0zOGFhLTQ4YjgtOThjNy1lYTBmMTY3NDBjMjciLCJyb2xlSWQiOiJkOWY2ZWI1Zi00MDEyLTRkNDYtOTAyYi00OTIyYmNjNjE2ODAiLCJyb2xlTmFtZSI6IkFETUlOSVNUUkFUT1IiLCJpYXQiOjE3ODQyMjczNTgsImV4cCI6MTc4NDIyODI1OCwiaXNzIjoid2F5cG9pbnQtYXBpIn0.Jrom5eUai5xgAblFdXdvgQ9EZaoKHGsWZOV6Yf4xPfY",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:4000 /api/v1/projects",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000 ",
+              "path": [
+                "api",
+                "v1",
+                "projects"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Restore Project",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OGY5NjUzZi0zOGFhLTQ4YjgtOThjNy1lYTBmMTY3NDBjMjciLCJyb2xlSWQiOiJkOWY2ZWI1Zi00MDEyLTRkNDYtOTAyYi00OTIyYmNjNjE2ODAiLCJyb2xlTmFtZSI6IkFETUlOSVNUUkFUT1IiLCJpYXQiOjE3ODQyMjczNTgsImV4cCI6MTc4NDIyODI1OCwiaXNzIjoid2F5cG9pbnQtYXBpIn0.Jrom5eUai5xgAblFdXdvgQ9EZaoKHGsWZOV6Yf4xPfY",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:4000 /api/v1/projects/d8008864-6711-4dc9-a3cc-d062f6e75e35/restore",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000 ",
+              "path": [
+                "api",
+                "v1",
+                "projects",
+                "d8008864-6711-4dc9-a3cc-d062f6e75e35",
+                "restore"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Project",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OGY5NjUzZi0zOGFhLTQ4YjgtOThjNy1lYTBmMTY3NDBjMjciLCJyb2xlSWQiOiJkOWY2ZWI1Zi00MDEyLTRkNDYtOTAyYi00OTIyYmNjNjE2ODAiLCJyb2xlTmFtZSI6IkFETUlOSVNUUkFUT1IiLCJpYXQiOjE3ODQyMjczNTgsImV4cCI6MTc4NDIyODI1OCwiaXNzIjoid2F5cG9pbnQtYXBpIn0.Jrom5eUai5xgAblFdXdvgQ9EZaoKHGsWZOV6Yf4xPfY",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:4000 /api/v1/projects/d8008864-6711-4dc9-a3cc-d062f6e75e35",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000 ",
+              "path": [
+                "api",
+                "v1",
+                "projects",
+                "d8008864-6711-4dc9-a3cc-d062f6e75e35"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Project Activity",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OGY5NjUzZi0zOGFhLTQ4YjgtOThjNy1lYTBmMTY3NDBjMjciLCJyb2xlSWQiOiJkOWY2ZWI1Zi00MDEyLTRkNDYtOTAyYi00OTIyYmNjNjE2ODAiLCJyb2xlTmFtZSI6IkFETUlOSVNUUkFUT1IiLCJpYXQiOjE3ODQyMjczNTgsImV4cCI6MTc4NDIyODI1OCwiaXNzIjoid2F5cG9pbnQtYXBpIn0.Jrom5eUai5xgAblFdXdvgQ9EZaoKHGsWZOV6Yf4xPfY",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:4000 /api/v1/projects/4295301a-b259-4507-b47f-16d09e7df438/activity",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000 ",
+              "path": [
+                "api",
+                "v1",
+                "projects",
+                "4295301a-b259-4507-b47f-16d09e7df438",
+                "activity"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Member",
+      "item": [
+        {
+          "name": "Add Member",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OGY5NjUzZi0zOGFhLTQ4YjgtOThjNy1lYTBmMTY3NDBjMjciLCJyb2xlSWQiOiJkOWY2ZWI1Zi00MDEyLTRkNDYtOTAyYi00OTIyYmNjNjE2ODAiLCJyb2xlTmFtZSI6IkFETUlOSVNUUkFUT1IiLCJpYXQiOjE3ODQyMjU3NDIsImV4cCI6MTc4NDIyNjY0MiwiaXNzIjoid2F5cG9pbnQtYXBpIn0.TOHjdeOzLHvpRNDCMb2-Oe9wQAU9Pl2COeifHBz5FC8",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"userId\": \"68f9653f-38aa-48b8-98c7-ea0f16740c27\",\r\n  \"role\": \"MANAGER\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:4000 /api/v1/projects/4295301a-b259-4507-b47f-16d09e7df438/members",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000 ",
+              "path": [
+                "api",
+                "v1",
+                "projects",
+                "4295301a-b259-4507-b47f-16d09e7df438",
+                "members"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Member Role",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OGY5NjUzZi0zOGFhLTQ4YjgtOThjNy1lYTBmMTY3NDBjMjciLCJyb2xlSWQiOiJkOWY2ZWI1Zi00MDEyLTRkNDYtOTAyYi00OTIyYmNjNjE2ODAiLCJyb2xlTmFtZSI6IkFETUlOSVNUUkFUT1IiLCJpYXQiOjE3ODQyMjU3NDIsImV4cCI6MTc4NDIyNjY0MiwiaXNzIjoid2F5cG9pbnQtYXBpIn0.TOHjdeOzLHvpRNDCMb2-Oe9wQAU9Pl2COeifHBz5FC8",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"role\": \"CONTRIBUTOR\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:4000 /api/v1/projects/4295301a-b259-4507-b47f-16d09e7df438/members/68f9653f-38aa-48b8-98c7-ea0f16740c27",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000 ",
+              "path": [
+                "api",
+                "v1",
+                "projects",
+                "4295301a-b259-4507-b47f-16d09e7df438",
+                "members",
+                "68f9653f-38aa-48b8-98c7-ea0f16740c27"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Remove Member",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OGY5NjUzZi0zOGFhLTQ4YjgtOThjNy1lYTBmMTY3NDBjMjciLCJyb2xlSWQiOiJkOWY2ZWI1Zi00MDEyLTRkNDYtOTAyYi00OTIyYmNjNjE2ODAiLCJyb2xlTmFtZSI6IkFETUlOSVNUUkFUT1IiLCJpYXQiOjE3ODQyMjU3NDIsImV4cCI6MTc4NDIyNjY0MiwiaXNzIjoid2F5cG9pbnQtYXBpIn0.TOHjdeOzLHvpRNDCMb2-Oe9wQAU9Pl2COeifHBz5FC8",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"role\": \"CONTRIBUTOR\"\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:4000 /api/v1/projects/4295301a-b259-4507-b47f-16d09e7df438/members/68f9653f-38aa-48b8-98c7-ea0f16740c27",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000 ",
+              "path": [
+                "api",
+                "v1",
+                "projects",
+                "4295301a-b259-4507-b47f-16d09e7df438",
+                "members",
+                "68f9653f-38aa-48b8-98c7-ea0f16740c27"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Task",
+      "item": [
+        {
+          "name": "List Tasks",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OGY5NjUzZi0zOGFhLTQ4YjgtOThjNy1lYTBmMTY3NDBjMjciLCJyb2xlSWQiOiJkOWY2ZWI1Zi00MDEyLTRkNDYtOTAyYi00OTIyYmNjNjE2ODAiLCJyb2xlTmFtZSI6IkFETUlOSVNUUkFUT1IiLCJpYXQiOjE3ODQyMjczNTgsImV4cCI6MTc4NDIyODI1OCwiaXNzIjoid2F5cG9pbnQtYXBpIn0.Jrom5eUai5xgAblFdXdvgQ9EZaoKHGsWZOV6Yf4xPfY",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:4000 /api/v1/projects/4295301a-b259-4507-b47f-16d09e7df438/tasks",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000 ",
+              "path": [
+                "api",
+                "v1",
+                "projects",
+                "4295301a-b259-4507-b47f-16d09e7df438",
+                "tasks"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Task",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OGY5NjUzZi0zOGFhLTQ4YjgtOThjNy1lYTBmMTY3NDBjMjciLCJyb2xlSWQiOiJkOWY2ZWI1Zi00MDEyLTRkNDYtOTAyYi00OTIyYmNjNjE2ODAiLCJyb2xlTmFtZSI6IkFETUlOSVNUUkFUT1IiLCJpYXQiOjE3ODQyMjczNTgsImV4cCI6MTc4NDIyODI1OCwiaXNzIjoid2F5cG9pbnQtYXBpIn0.Jrom5eUai5xgAblFdXdvgQ9EZaoKHGsWZOV6Yf4xPfY",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"title\": \"Create Authentication Module\",\r\n  \"description\": \"Develop login, register and JWT authentication\",\r\n  \"priority\": \"HIGH\",\r\n  \"status\": \"TODO\",\r\n  \"assigneeId\": \"c318808a-81e3-4420-8927-d94b2295da6d\",\r\n  \"startDate\": \"2026-07-16\",\r\n  \"dueDate\": \"2026-07-25\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:4000 /api/v1/projects/4295301a-b259-4507-b47f-16d09e7df438/tasks",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000 ",
+              "path": [
+                "api",
+                "v1",
+                "projects",
+                "4295301a-b259-4507-b47f-16d09e7df438",
+                "tasks"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Kanban Board",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OGY5NjUzZi0zOGFhLTQ4YjgtOThjNy1lYTBmMTY3NDBjMjciLCJyb2xlSWQiOiJkOWY2ZWI1Zi00MDEyLTRkNDYtOTAyYi00OTIyYmNjNjE2ODAiLCJyb2xlTmFtZSI6IkFETUlOSVNUUkFUT1IiLCJpYXQiOjE3ODQyMjczNTgsImV4cCI6MTc4NDIyODI1OCwiaXNzIjoid2F5cG9pbnQtYXBpIn0.Jrom5eUai5xgAblFdXdvgQ9EZaoKHGsWZOV6Yf4xPfY",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"title\": \"Create Authentication Module\",\r\n  \"description\": \"Develop login, register and JWT authentication\",\r\n  \"priority\": \"HIGH\",\r\n  \"status\": \"TODO\",\r\n  \"assigneeId\": \"c318808a-81e3-4420-8927-d94b2295da6d\",\r\n  \"startDate\": \"2026-07-16\",\r\n  \"dueDate\": \"2026-07-25\"\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:4000 /api/v1/projects/4295301a-b259-4507-b47f-16d09e7df438/tasks/board",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000 ",
+              "path": [
+                "api",
+                "v1",
+                "projects",
+                "4295301a-b259-4507-b47f-16d09e7df438",
+                "tasks",
+                "board"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Team",
+      "item": [
+        {
+          "name": "List Teams",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OGY5NjUzZi0zOGFhLTQ4YjgtOThjNy1lYTBmMTY3NDBjMjciLCJyb2xlSWQiOiJkOWY2ZWI1Zi00MDEyLTRkNDYtOTAyYi00OTIyYmNjNjE2ODAiLCJyb2xlTmFtZSI6IkFETUlOSVNUUkFUT1IiLCJpYXQiOjE3ODQyMjczNTgsImV4cCI6MTc4NDIyODI1OCwiaXNzIjoid2F5cG9pbnQtYXBpIn0.Jrom5eUai5xgAblFdXdvgQ9EZaoKHGsWZOV6Yf4xPfY",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:4000/api/v1/teams",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "api",
+                "v1",
+                "teams"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Team Details",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OGY5NjUzZi0zOGFhLTQ4YjgtOThjNy1lYTBmMTY3NDBjMjciLCJyb2xlSWQiOiJkOWY2ZWI1Zi00MDEyLTRkNDYtOTAyYi00OTIyYmNjNjE2ODAiLCJyb2xlTmFtZSI6IkFETUlOSVNUUkFUT1IiLCJpYXQiOjE3ODQyMjczNTgsImV4cCI6MTc4NDIyODI1OCwiaXNzIjoid2F5cG9pbnQtYXBpIn0.Jrom5eUai5xgAblFdXdvgQ9EZaoKHGsWZOV6Yf4xPfY",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:4000/api/v1/teams/00000000-0000-0000-0000-000000000001",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "api",
+                "v1",
+                "teams",
+                "00000000-0000-0000-0000-000000000001"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Team",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OGY5NjUzZi0zOGFhLTQ4YjgtOThjNy1lYTBmMTY3NDBjMjciLCJyb2xlSWQiOiJkOWY2ZWI1Zi00MDEyLTRkNDYtOTAyYi00OTIyYmNjNjE2ODAiLCJyb2xlTmFtZSI6IkFETUlOSVNUUkFUT1IiLCJpYXQiOjE3ODQyMjgzMzIsImV4cCI6MTc4NDIyOTIzMiwiaXNzIjoid2F5cG9pbnQtYXBpIn0.NelkqGJFcWIiW0FYmQ35uf3CxI9zk04K0pmFp5BPrV8",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"Frontend Team\",\r\n  \"description\": \"Responsible for building the Next.js application\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:4000/api/v1/teams",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "api",
+                "v1",
+                "teams"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Team",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OGY5NjUzZi0zOGFhLTQ4YjgtOThjNy1lYTBmMTY3NDBjMjciLCJyb2xlSWQiOiJkOWY2ZWI1Zi00MDEyLTRkNDYtOTAyYi00OTIyYmNjNjE2ODAiLCJyb2xlTmFtZSI6IkFETUlOSVNUUkFUT1IiLCJpYXQiOjE3ODQyMjgzMzIsImV4cCI6MTc4NDIyOTIzMiwiaXNzIjoid2F5cG9pbnQtYXBpIn0.NelkqGJFcWIiW0FYmQ35uf3CxI9zk04K0pmFp5BPrV8",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"Frontend Team\",\r\n  \"description\": \"Responsible for building the Next.js application\"\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:4000/api/v1/teams/d3f93d2e-ea7c-40bf-bb14-3388cb929225",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "api",
+                "v1",
+                "teams",
+                "d3f93d2e-ea7c-40bf-bb14-3388cb929225"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Add Team Member",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OGY5NjUzZi0zOGFhLTQ4YjgtOThjNy1lYTBmMTY3NDBjMjciLCJyb2xlSWQiOiJkOWY2ZWI1Zi00MDEyLTRkNDYtOTAyYi00OTIyYmNjNjE2ODAiLCJyb2xlTmFtZSI6IkFETUlOSVNUUkFUT1IiLCJpYXQiOjE3ODQyMjgzMzIsImV4cCI6MTc4NDIyOTIzMiwiaXNzIjoid2F5cG9pbnQtYXBpIn0.NelkqGJFcWIiW0FYmQ35uf3CxI9zk04K0pmFp5BPrV8",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"userId\": \"c318808a-81e3-4420-8927-d94b2295da6d\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:4000/api/v1/teams/00000000-0000-0000-0000-000000000001/members",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "api",
+                "v1",
+                "teams",
+                "00000000-0000-0000-0000-000000000001",
+                "members"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Remove Team Member",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OGY5NjUzZi0zOGFhLTQ4YjgtOThjNy1lYTBmMTY3NDBjMjciLCJyb2xlSWQiOiJkOWY2ZWI1Zi00MDEyLTRkNDYtOTAyYi00OTIyYmNjNjE2ODAiLCJyb2xlTmFtZSI6IkFETUlOSVNUUkFUT1IiLCJpYXQiOjE3ODQyMjgzMzIsImV4cCI6MTc4NDIyOTIzMiwiaXNzIjoid2F5cG9pbnQtYXBpIn0.NelkqGJFcWIiW0FYmQ35uf3CxI9zk04K0pmFp5BPrV8",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"Frontend Team\",\r\n  \"description\": \"Responsible for building the Next.js application\"\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:4000/api/v1/teams/00000000-0000-0000-0000-000000000001/members/c318808a-81e3-4420-8927-d94b2295da6d",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "api",
+                "v1",
+                "teams",
+                "00000000-0000-0000-0000-000000000001",
+                "members",
+                "c318808a-81e3-4420-8927-d94b2295da6d"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
